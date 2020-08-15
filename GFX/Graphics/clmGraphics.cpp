@@ -107,12 +107,12 @@ Graphics::Graphics(HWND hwnd) {
 
 	
 	// Compile vertex shader
-	std::wstring strShaderFileName = L"VSmain.hlsl";
+	std::wstring strShaderFileName = L"GFX/Graphics/Shaders/VSmain.hlsl";
 	std::string strShaderEntryPoint = "main";
 	CLM_EXCEPT_GFX_HR_INFO(D3DCompileFromFile(strShaderFileName.c_str(), NULL, NULL, strShaderEntryPoint.c_str(), "vs_5_0", D3DCOMPILE_WARNINGS_ARE_ERRORS, 0, &ptrVSBlob, &ptrVSErrorBlob));
 
 	// Compile pixel shader
-	strShaderFileName = L"PSmain.hlsl";
+	strShaderFileName = L"GFX/Graphics/Shaders/PSmain.hlsl";
 	strShaderEntryPoint = "main";
 	CLM_EXCEPT_GFX_HR_INFO(D3DCompileFromFile(strShaderFileName.c_str(), NULL, NULL, strShaderEntryPoint.c_str(), "ps_5_0", D3DCOMPILE_WARNINGS_ARE_ERRORS, 0, &ptrPSBlob, &ptrPSErrorBlob));
 
