@@ -1,0 +1,6 @@
+#Build folders
+x64/
+x86/
+
+# Visual studio folders
+.vs/

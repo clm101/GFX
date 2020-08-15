@@ -1,19 +1,19 @@
 #ifndef CLM_GRAPHICS_H
 #define CLM_GRAPHICS_H
 
-#include "ExceptionBase.h"
-#include "GraphicsDebugDefines.h"
-#include "Windows.h"
-#include "d3d11.h"
-#include "Windows.Foundation.h"
-#include "wrl\wrappers\corewrappers.h"
-#include "wrl\client.h"
-#include "dxgi1_3.h"
-#include "Dxgi1_6.h"
+#include <Windows.h>
+#include <d3d11.h>
+#include <windows.foundation.h>
+#include <wrl\wrappers\corewrappers.h>
+#include <wrl\client.h>
+#include <dxgi1_3.h>
+#include <Dxgi1_6.h>
 #include <vector>
-#include "DxgiInfoManager.h"
 #include <d2d1.h>
 #include <d2d1_1.h>
+#include "DxgiInfoManager.h"
+#include "ExceptionBase.h"
+#include "../DebugDefines/GraphicsDebugDefines.h"
 
 namespace mswrl = Microsoft::WRL;
 

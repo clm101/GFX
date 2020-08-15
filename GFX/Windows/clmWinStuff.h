@@ -4,7 +4,7 @@
 #include "Windows.h"
 #include "ExceptionBase.h"
 #include "WMMap.h"
-#include "clmGraphics.h"
+#include "../Graphics/clmGraphics.h"
 
 #ifndef WINSTUFF_H
 #define WINSTUFF_H
