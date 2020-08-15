@@ -1,6 +1,6 @@
 #include "DxgiInfoManager.h"
-#include "clmWinStuff.h"
-#include "WinDebugDefines.h"
+#include "../Windows/clmWinStuff.h"
+#include "../DebugDefines/WinDebugDefines.h"
 
 DxgiInfoManager::DxgiInfoManager() {
 	typedef HRESULT(*DXGIGetDebugInterface)(REFIID, void**);

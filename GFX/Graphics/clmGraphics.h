@@ -12,7 +12,7 @@
 #include <d2d1.h>
 #include <d2d1_1.h>
 #include "DxgiInfoManager.h"
-#include "ExceptionBase.h"
+#include "../ExceptionBase.h"
 #include "../DebugDefines/GraphicsDebugDefines.h"
 
 namespace mswrl = Microsoft::WRL;

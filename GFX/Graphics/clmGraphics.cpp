@@ -1,8 +1,8 @@
-#include "clmGraphics.h"
-#include "GraphicsDebugDefines.h"
-#include "combaseapi.h"
+#include <combaseapi.h>
 #include <d3dcompiler.h>
 #include <numbers>
+#include "clmGraphics.h"
+#include "../DebugDefines/GraphicsDebugDefines.h"
 #include "DxgiInfoManager.h"
 
 std::string Graphics::GFXExceptionBase::getGfxErrorString(HRESULT hr) noexcept {

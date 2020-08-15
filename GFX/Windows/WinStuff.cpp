@@ -1,5 +1,5 @@
 #include "clmWinStuff.h"
-#include "WinDebugDefines.h"
+#include "../DebugDefines/WinDebugDefines.h"
 
 /**********************************/
 /***	EXCEPTION HANDLING		***/

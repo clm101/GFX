@@ -1,6 +1,11 @@
 #Build folders
 x64/
 x86/
+Debug/
 
 # Visual studio folders
 .vs/
+
+# Other files
+*.suo
+*.sqlite

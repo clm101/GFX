@@ -1,8 +1,8 @@
+#include <Windows.h>
 #include <string>
 #include <memory>
 #include <optional>
-#include "Windows.h"
-#include "ExceptionBase.h"
+#include "../ExceptionBase.h"
 #include "WMMap.h"
 #include "../Graphics/clmGraphics.h"
 
