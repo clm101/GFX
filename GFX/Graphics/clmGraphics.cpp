@@ -172,7 +172,7 @@ void Graphics::BeginFrame(const double fTime) {
 	ptrD2DDeviceContext->BeginDraw();
 	ID2D1SolidColorBrush* brush;
 	const D2D1_COLOR_F col = D2D1::ColorF(D2D1::ColorF::White);
-	ptrD2DDeviceContext->CreateSolidColorBrush(col, &brush);
+	CLM_EXCEPT_GFX_HR_INFO(ptrD2DDeviceContext->CreateSolidColorBrush(col, &brush));
 	ptrD2DDeviceContext->FillRectangle({ 0.f, 0.f, 100.f, 100.f }, brush);
 	CLM_EXCEPT_GFX_HR_INFO(ptrD2DDeviceContext->EndDraw());
 	brush->Release();
