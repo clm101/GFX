@@ -97,37 +97,64 @@ Graphics::Graphics(HWND hwnd) {
 	dxgiSwapChainDesc.Windowed = TRUE;
 	dxgiSwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 	dxgiSwapChainDesc.Flags = 0;
-	CLM_EXCEPT_GFX_HR_INFO(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, D3D11_CREATE_DEVICE_DEBUG, featureLevels, sizeof(featureLevels) / sizeof(D3D_FEATURE_LEVEL),
-		D3D11_SDK_VERSION, &dxgiSwapChainDesc, &ptrSwapChain, &ptrDevice, nullptr, &ptrDeviceContext));
+	CLM_EXCEPT_GFX_HR_INFO(D3D11CreateDeviceAndSwapChain(nullptr,
+		D3D_DRIVER_TYPE_HARDWARE,
+		nullptr,
+		D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_BIND_RENDER_TARGET,
+		featureLevels,
+		sizeof(featureLevels) / sizeof(D3D_FEATURE_LEVEL),
+		D3D11_SDK_VERSION,
+		&dxgiSwapChainDesc,
+		&ptrSwapChain,
+		&ptrDevice,
+		nullptr,
+		&ptrDeviceContext));
+
+	// Create DXGI Device and get Direct2D device
+	CLM_EXCEPT_GFX_HR_INFO(ptrDevice->QueryInterface(__uuidof(IDXGIDevice), (void**)&ptrDXGIDevice));
+	D2D1_CREATION_PROPERTIES d2dCreationProp{ D2D1_THREADING_MODE_SINGLE_THREADED, D2D1_DEBUG_LEVEL_INFORMATION, D2D1_DEVICE_CONTEXT_OPTIONS_NONE };
+	CLM_EXCEPT_GFX_HR_INFO(D2D1CreateDevice(ptrDXGIDevice.Get(), d2dCreationProp, &ptrD2DDevice));
+	CLM_EXCEPT_GFX_HR_INFO(ptrD2DDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &ptrD2DDeviceContext));
+	mswrl::ComPtr<IDXGISurface> ptrDXGISurface;
+	ptrSwapChain->GetBuffer(0, IID_PPV_ARGS(&ptrDXGISurface));
+	const D2D1_BITMAP_PROPERTIES1 dbpBitmapProp{ {DXGI_FORMAT_R8G8B8A8_UNORM, D2D1_ALPHA_MODE_IGNORE},
+		0.f, 0.f,
+		{D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW},
+		NULL };
+	CLM_EXCEPT_GFX_HR_INFO(ptrD2DDeviceContext->CreateBitmapFromDxgiSurface(ptrDXGISurface.Get(), dbpBitmapProp, &ptrBitmap));
+	ptrD2DDeviceContext->SetTarget(ptrBitmap);
 
 	ID3D11Resource* pBackBuffer = nullptr;
-	ptrSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&pBackBuffer));
+	CLM_EXCEPT_GFX_HR_INFO(ptrSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&pBackBuffer)));
 	ptrDevice->CreateRenderTargetView(pBackBuffer, nullptr, &ptrTarget);
 	pBackBuffer->Release();
 
-	
-	// Compile vertex shader
-	std::wstring strShaderFileName = L"GFX/Graphics/Shaders/VSmain.hlsl";
-	std::string strShaderEntryPoint = "main";
-	CLM_EXCEPT_GFX_HR_INFO(D3DCompileFromFile(strShaderFileName.c_str(), NULL, NULL, strShaderEntryPoint.c_str(), "vs_5_0", D3DCOMPILE_WARNINGS_ARE_ERRORS, 0, &ptrVSBlob, &ptrVSErrorBlob));
+	//
+	//// Compile vertex shader
+	//std::wstring strShaderFileName = L"GFX/Graphics/Shaders/VSmain.hlsl";
+	//std::string strShaderEntryPoint = "main";
+	//CLM_EXCEPT_GFX_HR_INFO(D3DCompileFromFile(strShaderFileName.c_str(), NULL, NULL, strShaderEntryPoint.c_str(), "vs_5_0", D3DCOMPILE_WARNINGS_ARE_ERRORS, 0, &ptrVSBlob, &ptrVSErrorBlob));
 
-	// Compile pixel shader
-	strShaderFileName = L"GFX/Graphics/Shaders/PSmain.hlsl";
-	strShaderEntryPoint = "main";
-	CLM_EXCEPT_GFX_HR_INFO(D3DCompileFromFile(strShaderFileName.c_str(), NULL, NULL, strShaderEntryPoint.c_str(), "ps_5_0", D3DCOMPILE_WARNINGS_ARE_ERRORS, 0, &ptrPSBlob, &ptrPSErrorBlob));
+	//// Compile pixel shader
+	//strShaderFileName = L"GFX/Graphics/Shaders/PSmain.hlsl";
+	//strShaderEntryPoint = "main";
+	//CLM_EXCEPT_GFX_HR_INFO(D3DCompileFromFile(strShaderFileName.c_str(), NULL, NULL, strShaderEntryPoint.c_str(), "ps_5_0", D3DCOMPILE_WARNINGS_ARE_ERRORS, 0, &ptrPSBlob, &ptrPSErrorBlob));
 
-	// Create and load vertex shader
-	CLM_EXCEPT_GFX_HR_INFO(ptrDevice->CreateVertexShader(ptrVSBlob->GetBufferPointer(), ptrVSBlob->GetBufferSize(), NULL, &ptrVertexShader));
-	CLM_EXCEPT_GFX_INFO_ONLY(ptrDeviceContext->VSSetShader(ptrVertexShader.Get(), NULL, 0));
+	//// Create and load vertex shader
+	//CLM_EXCEPT_GFX_HR_INFO(ptrDevice->CreateVertexShader(ptrVSBlob->GetBufferPointer(), ptrVSBlob->GetBufferSize(), NULL, &ptrVertexShader));
+	//CLM_EXCEPT_GFX_INFO_ONLY(ptrDeviceContext->VSSetShader(ptrVertexShader.Get(), NULL, 0));
 
-	// Create and load pixel shader
-	CLM_EXCEPT_GFX_HR_INFO(ptrDevice->CreatePixelShader(ptrPSBlob->GetBufferPointer(), ptrPSBlob->GetBufferSize(), NULL, &ptrPixelShader));
-	CLM_EXCEPT_GFX_INFO_ONLY(ptrDeviceContext->PSSetShader(ptrPixelShader.Get(), NULL, 0));
+	//// Create and load pixel shader
+	//CLM_EXCEPT_GFX_HR_INFO(ptrDevice->CreatePixelShader(ptrPSBlob->GetBufferPointer(), ptrPSBlob->GetBufferSize(), NULL, &ptrPixelShader));
+	//CLM_EXCEPT_GFX_INFO_ONLY(ptrDeviceContext->PSSetShader(ptrPixelShader.Get(), NULL, 0));
 
 }
 
 Graphics::~Graphics() {
 	DESTRUCTOR_CONFIRM(~Graphics);
+	SafeRelease(ptrBitmap);
+	SafeRelease(ptrD2DDeviceContext);
+	SafeRelease(ptrD2DDevice);
 }
 
 void Graphics::ClearBuffer(const double fTime) {
@@ -140,77 +167,86 @@ void Graphics::ClearBuffer(const double fTime) {
 
 void Graphics::BeginFrame(const double fTime) {
 	ClearBuffer(fTime);
+	static HRESULT hr;
 
-	struct Vertex {
-		float x;
-		float y;
-	};
+	ptrD2DDeviceContext->BeginDraw();
+	ID2D1SolidColorBrush* brush;
+	const D2D1_COLOR_F col = D2D1::ColorF(D2D1::ColorF::White);
+	ptrD2DDeviceContext->CreateSolidColorBrush(col, &brush);
+	ptrD2DDeviceContext->FillRectangle({ 0.f, 0.f, 100.f, 100.f }, brush);
+	CLM_EXCEPT_GFX_HR_INFO(ptrD2DDeviceContext->EndDraw());
+	brush->Release();
 
-	// Triangle vertices
-	Vertex v[] = { {-1.0f, 1.0f}, {1.0f, -1.0f}, {-1.0f, -1.0f}, {-1.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, -1.0f} };
+	//struct Vertex {
+	//	float x;
+	//	float y;
+	//};
 
-	ptrDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//// Triangle vertices
+	//Vertex v[] = { {-1.0f, 1.0f}, {1.0f, -1.0f}, {-1.0f, -1.0f}, {-1.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, -1.0f} };
 
-	// Load vertex information
-	D3D11_BUFFER_DESC bdVertex{};
-	bdVertex.ByteWidth = (UINT)(std::size(v) * sizeof(Vertex));
-	bdVertex.Usage = D3D11_USAGE_DEFAULT;
-	bdVertex.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bdVertex.CPUAccessFlags = 0;
-	bdVertex.MiscFlags = 0;
-	bdVertex.StructureByteStride = sizeof(Vertex);
-	D3D11_SUBRESOURCE_DATA sdVertex{};
-	sdVertex.pSysMem = v;
-	ptrDevice->CreateBuffer(&bdVertex, &sdVertex, &ptrVBuffer);
-	const UINT nStride = sizeof(Vertex);
-	const UINT nOffset = 0u;
-	ptrDeviceContext->IASetVertexBuffers(0u, 1u, ptrVBuffer.GetAddressOf(), &nStride, &nOffset);
+	//ptrDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	D3D11_INPUT_ELEMENT_DESC ied{};
-	ied.SemanticName = "Position";
-	ied.SemanticIndex = 0u;
-	ied.AlignedByteOffset = 0u;
-	ied.Format = DXGI_FORMAT_R32G32_FLOAT;
-	ied.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-	ied.InstanceDataStepRate = 0u;
-	ptrDevice->CreateInputLayout(&ied, 1u, ptrVSBlob->GetBufferPointer(), ptrVSBlob->GetBufferSize(), &ptrInputLayout);
-	ptrDeviceContext->IASetInputLayout(ptrInputLayout.Get());
+	//// Load vertex information
+	//D3D11_BUFFER_DESC bdVertex{};
+	//bdVertex.ByteWidth = (UINT)(std::size(v) * sizeof(Vertex));
+	//bdVertex.Usage = D3D11_USAGE_DEFAULT;
+	//bdVertex.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	//bdVertex.CPUAccessFlags = 0;
+	//bdVertex.MiscFlags = 0;
+	//bdVertex.StructureByteStride = sizeof(Vertex);
+	//D3D11_SUBRESOURCE_DATA sdVertex{};
+	//sdVertex.pSysMem = v;
+	//ptrDevice->CreateBuffer(&bdVertex, &sdVertex, &ptrVBuffer);
+	//const UINT nStride = sizeof(Vertex);
+	//const UINT nOffset = 0u;
+	//ptrDeviceContext->IASetVertexBuffers(0u, 1u, ptrVBuffer.GetAddressOf(), &nStride, &nOffset);
 
-	struct PSConstBufferData {
-		float width;
-		float height;
-		float fTime;
-		float filler;
-	};
-	PSConstBufferData dim{ 1000.0f, 1000.0f, fTime, 0.0f };
+	//D3D11_INPUT_ELEMENT_DESC ied{};
+	//ied.SemanticName = "Position";
+	//ied.SemanticIndex = 0u;
+	//ied.AlignedByteOffset = 0u;
+	//ied.Format = DXGI_FORMAT_R32G32_FLOAT;
+	//ied.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	//ied.InstanceDataStepRate = 0u;
+	//ptrDevice->CreateInputLayout(&ied, 1u, ptrVSBlob->GetBufferPointer(), ptrVSBlob->GetBufferSize(), &ptrInputLayout);
+	//ptrDeviceContext->IASetInputLayout(ptrInputLayout.Get());
 
-	D3D11_BUFFER_DESC bdPixel{};
-	bdPixel.ByteWidth = (UINT)sizeof(PSConstBufferData);
-	bdPixel.Usage = D3D11_USAGE_DEFAULT;
-	bdPixel.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bdPixel.CPUAccessFlags = 0;
-	bdPixel.MiscFlags = 0;
-	bdPixel.StructureByteStride = sizeof(PSConstBufferData);
-	D3D11_SUBRESOURCE_DATA sdPixel{};
-	sdPixel.pSysMem = &dim;
-	ptrDevice->CreateBuffer(&bdPixel, &sdPixel, &ptrPSBuffer);
-	CLM_EXCEPT_GFX_INFO_ONLY(ptrDeviceContext->PSSetConstantBuffers(0u, 1u, ptrPSBuffer.GetAddressOf()));
+	//struct PSConstBufferData {
+	//	float width;
+	//	float height;
+	//	float fTime;
+	//	float filler;
+	//};
+	//PSConstBufferData dim{ 1000.0f, 1000.0f, fTime, 0.0f };
 
-	// Set up viewport
-	D3D11_VIEWPORT viewport{};
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.Width = 1000;
-	viewport.Height = 1000;
-	viewport.MinDepth = 0;
-	viewport.MaxDepth = 1;
+	//D3D11_BUFFER_DESC bdPixel{};
+	//bdPixel.ByteWidth = (UINT)sizeof(PSConstBufferData);
+	//bdPixel.Usage = D3D11_USAGE_DEFAULT;
+	//bdPixel.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	//bdPixel.CPUAccessFlags = 0;
+	//bdPixel.MiscFlags = 0;
+	//bdPixel.StructureByteStride = sizeof(PSConstBufferData);
+	//D3D11_SUBRESOURCE_DATA sdPixel{};
+	//sdPixel.pSysMem = &dim;
+	//ptrDevice->CreateBuffer(&bdPixel, &sdPixel, &ptrPSBuffer);
+	//CLM_EXCEPT_GFX_INFO_ONLY(ptrDeviceContext->PSSetConstantBuffers(0u, 1u, ptrPSBuffer.GetAddressOf()));
 
-	CLM_EXCEPT_GFX_INFO_ONLY(ptrDeviceContext->RSSetViewports(1u, &viewport));
+	//// Set up viewport
+	//D3D11_VIEWPORT viewport{};
+	//viewport.TopLeftX = 0;
+	//viewport.TopLeftY = 0;
+	//viewport.Width = 1000;
+	//viewport.Height = 1000;
+	//viewport.MinDepth = 0;
+	//viewport.MaxDepth = 1;
 
-	// Load pixel shader
+	//CLM_EXCEPT_GFX_INFO_ONLY(ptrDeviceContext->RSSetViewports(1u, &viewport));
 
-	CLM_EXCEPT_GFX_INFO_ONLY(ptrDeviceContext->OMSetRenderTargets(1, ptrTarget.GetAddressOf(), nullptr));
-	CLM_EXCEPT_GFX_INFO_ONLY(ptrDeviceContext->Draw((UINT)std::size(v), 0u));
+	//// Load pixel shader
+
+	//CLM_EXCEPT_GFX_INFO_ONLY(ptrDeviceContext->OMSetRenderTargets(1, ptrTarget.GetAddressOf(), nullptr));
+	//CLM_EXCEPT_GFX_INFO_ONLY(ptrDeviceContext->Draw((UINT)std::size(v), 0u));
 	return;
 }
 void Graphics::EndFrame() {

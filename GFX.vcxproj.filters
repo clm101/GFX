@@ -15,28 +15,34 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application.h">
+    <ClInclude Include="GFX\Graphics\clmGraphics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseDebugDefines.h">
+    <ClInclude Include="GFX\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="clmGraphics.h">
+    <ClInclude Include="GFX\clmTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="clmTimer.h">
+    <ClInclude Include="GFX\ExceptionBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="clmWinStuff.h">
+    <ClInclude Include="GFX\Windows\clmWinStuff.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DxgiInfoManager.h">
+    <ClInclude Include="GFX\Windows\WMMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExceptionBase.h">
+    <ClInclude Include="GFX\Graphics\DxgiInfoManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WMMap.h">
+    <ClInclude Include="GFX\DebugDefines\BaseDebugDefines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GFX\DebugDefines\GraphicsDebugDefines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GFX\DebugDefines\WinDebugDefines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

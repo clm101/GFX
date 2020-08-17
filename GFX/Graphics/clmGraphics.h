@@ -28,6 +28,13 @@ private:
 	mswrl::ComPtr<ID3D11DeviceContext> ptrDeviceContext;
 	mswrl::ComPtr<ID3D11RenderTargetView> ptrTarget;
 
+	// Direct2D
+	mswrl::ComPtr<IDXGIDevice> ptrDXGIDevice;
+	ID2D1Device* ptrD2DDevice;
+	ID2D1DeviceContext* ptrD2DDeviceContext;
+	//IDXGISurface* ptrDXGISurface;
+	ID2D1Bitmap1* ptrBitmap;
+
 	// Pixel Shader
 	mswrl::ComPtr<ID3D11PixelShader> ptrPixelShader;
 	mswrl::ComPtr<ID3DBlob> ptrPSBlob;
@@ -70,4 +77,12 @@ public:
 	void ClearBuffer(const double);
 };
 
+template<class T>
+inline constexpr void SafeRelease(T* ptr) {
+	if (ptr != nullptr) {
+		ptr->Release();
+		
+	}
+	return;
+}
 #endif
