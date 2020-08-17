@@ -168,6 +168,7 @@
     <ClInclude Include="GFX\Graphics\clmGraphics.h" />
     <ClInclude Include="GFX\Graphics\DxgiInfoManager.h" />
     <ClInclude Include="GFX\Windows\clmWinStuff.h" />
+    <ClInclude Include="GFX\Windows\Mouse.h" />
     <ClInclude Include="GFX\Windows\WMMap.h" />
   </ItemGroup>
   <ItemGroup>
@@ -191,6 +192,7 @@
     <ClCompile Include="GFX\Graphics\clmGraphics.cpp" />
     <ClCompile Include="GFX\Graphics\DxgiInfoManager.cpp" />
     <ClCompile Include="GFX\main.cpp" />
+    <ClCompile Include="GFX\Windows\Mouse.cpp" />
     <ClCompile Include="GFX\Windows\WinStuff.cpp" />
     <ClCompile Include="GFX\Windows\WMMap.cpp" />
   </ItemGroup>

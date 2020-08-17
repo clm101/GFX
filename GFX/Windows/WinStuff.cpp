@@ -170,6 +170,18 @@ LRESULT CALLBACK Window::MsgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 				<< ", " << coord.y << ")";
 		CLM_EXCEPT_LAST(SetWindowTextA(hwnd, ossTitle.str().c_str()));
 	}
+	case WM_LBUTTONUP:
+	{
+		break;
+	}
+	case WM_RBUTTONDOWN:
+	{
+		break;
+	}
+	case WM_RBUTTONUP:
+	{
+		break;
+	}
 	default:
 		break;
 	}

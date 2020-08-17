@@ -34,6 +34,7 @@ private:
 	ID2D1DeviceContext* ptrD2DDeviceContext;
 	//IDXGISurface* ptrDXGISurface;
 	ID2D1Bitmap1* ptrBitmap;
+	ID2D1SolidColorBrush* brush;
 
 	// Pixel Shader
 	mswrl::ComPtr<ID3D11PixelShader> ptrPixelShader;
@@ -78,7 +79,7 @@ public:
 };
 
 template<class T>
-inline constexpr void SafeRelease(T* ptr) {
+inline void SafeRelease(T* ptr) {
 	if (ptr != nullptr) {
 		ptr->Release();
 		

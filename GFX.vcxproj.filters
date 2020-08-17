@@ -45,6 +45,9 @@
     <ClInclude Include="GFX\DebugDefines\WinDebugDefines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GFX\Windows\Mouse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="GFX\Graphics\Shaders\PSmain.hlsl">
@@ -77,6 +80,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GFX\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GFX\Windows\Mouse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

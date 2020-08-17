@@ -1,6 +1,7 @@
 #include <combaseapi.h>
 #include <d3dcompiler.h>
 #include <numbers>
+#include <random>
 #include "clmGraphics.h"
 #include "../DebugDefines/GraphicsDebugDefines.h"
 #include "DxgiInfoManager.h"
@@ -123,7 +124,9 @@ Graphics::Graphics(HWND hwnd) {
 		NULL };
 	CLM_EXCEPT_GFX_HR_INFO(ptrD2DDeviceContext->CreateBitmapFromDxgiSurface(ptrDXGISurface.Get(), dbpBitmapProp, &ptrBitmap));
 	ptrD2DDeviceContext->SetTarget(ptrBitmap);
-
+	brush = nullptr;
+	
+	// Create render target view for D3D11
 	ID3D11Resource* pBackBuffer = nullptr;
 	CLM_EXCEPT_GFX_HR_INFO(ptrSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&pBackBuffer)));
 	ptrDevice->CreateRenderTargetView(pBackBuffer, nullptr, &ptrTarget);
@@ -152,6 +155,7 @@ Graphics::Graphics(HWND hwnd) {
 
 Graphics::~Graphics() {
 	DESTRUCTOR_CONFIRM(~Graphics);
+	SafeRelease(brush);
 	SafeRelease(ptrBitmap);
 	SafeRelease(ptrD2DDeviceContext);
 	SafeRelease(ptrD2DDevice);
@@ -165,17 +169,22 @@ void Graphics::ClearBuffer(const double fTime) {
 	ptrDeviceContext->ClearRenderTargetView(ptrTarget.Get(), color);
 }
 
+float getrandom() noexcept {
+	static std::random_device r{};
+	return (float)r() / (float)UINT_MAX;
+}
+
 void Graphics::BeginFrame(const double fTime) {
 	ClearBuffer(fTime);
 	static HRESULT hr;
 
+	if (brush == nullptr) {
+		CLM_EXCEPT_GFX_HR_INFO(ptrD2DDeviceContext->CreateSolidColorBrush(D2D1::ColorF( getrandom(), getrandom(), getrandom()), &brush));
+	}
+
 	ptrD2DDeviceContext->BeginDraw();
-	ID2D1SolidColorBrush* brush;
-	const D2D1_COLOR_F col = D2D1::ColorF(D2D1::ColorF::White);
-	CLM_EXCEPT_GFX_HR_INFO(ptrD2DDeviceContext->CreateSolidColorBrush(col, &brush));
 	ptrD2DDeviceContext->FillRectangle({ 0.f, 0.f, 100.f, 100.f }, brush);
 	CLM_EXCEPT_GFX_HR_INFO(ptrD2DDeviceContext->EndDraw());
-	brush->Release();
 
 	//struct Vertex {
 	//	float x;
