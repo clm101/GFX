@@ -1,3 +1,4 @@
+#include <windowsx.h>
 #include "clmWinStuff.h"
 #include "../DebugDefines/WinDebugDefines.h"
 
@@ -104,9 +105,10 @@ Window::Window(const wchar_t* pWindowName, short sWidth, short sHeight)
 	if (hwnd == NULL) {
 		CLM_EXCEPT_LAST_NARG();
 	}
-
 	ShowWindow(hwnd, SW_SHOW);
+
 	ptrGfx = std::make_unique<Graphics>(hwnd);
+	ptrMouse = std::make_unique<Mouse>();
 }
 
 // Destructor
@@ -169,17 +171,22 @@ LRESULT CALLBACK Window::MsgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 		ossTitle << "Mouse click: (" << coord.x
 				<< ", " << coord.y << ")";
 		CLM_EXCEPT_LAST(SetWindowTextA(hwnd, ossTitle.str().c_str()));
+		ptrMouse->on_left_click({ (std::int32_t)GET_X_LPARAM(lParam), (std::int32_t)GET_Y_LPARAM(lParam) });
+		break;
 	}
 	case WM_LBUTTONUP:
 	{
+		ptrMouse->on_left_release({ (std::int32_t)GET_X_LPARAM(lParam), (std::int32_t)GET_Y_LPARAM(lParam) });
 		break;
 	}
 	case WM_RBUTTONDOWN:
 	{
+		ptrMouse->on_right_click({ (std::int32_t)GET_X_LPARAM(lParam), (std::int32_t)GET_Y_LPARAM(lParam) });
 		break;
 	}
 	case WM_RBUTTONUP:
 	{
+		ptrMouse->on_right_release({ (std::int32_t)GET_X_LPARAM(lParam), (std::int32_t)GET_Y_LPARAM(lParam) });
 		break;
 	}
 	default:

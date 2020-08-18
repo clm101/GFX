@@ -7,6 +7,26 @@ Mouse::Mouse() noexcept {
 	posCursor = { 0, 0 };
 }
 
+const Mouse::Pos& Mouse::get_pos() const noexcept {
+	return posCursor;
+}
+
+std::int32_t Mouse::get_pos_x() const noexcept {
+	return posCursor.first;
+}
+
+std::int32_t Mouse::get_pos_y() const noexcept {
+	return posCursor.second;
+}
+
+bool Mouse::get_lbstate() const noexcept {
+	return bIsLeftPressed;
+}
+
+bool Mouse::get_rbstate() const noexcept {
+	return bIsRightPressed;
+}
+
 void Mouse::on_left_click(Pos pos) noexcept {
 	buffer.emplace(Event::Type::LClick, pos );
 	trim_buffer();
@@ -42,3 +62,5 @@ void Mouse::trim_buffer() noexcept {
 		buffer.pop();
 	}
 }
+
+Mouse::Event::Event(Type t, Pos p) noexcept : t(t), posCursor(p) {}

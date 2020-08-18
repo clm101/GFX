@@ -5,6 +5,7 @@
 #include "../ExceptionBase.h"
 #include "WMMap.h"
 #include "../Graphics/clmGraphics.h"
+#include "Mouse.h"
 
 #ifndef WINSTUFF_H
 #define WINSTUFF_H
@@ -16,6 +17,7 @@ private:
 	const wchar_t* pWindowName;
 	POINTS ptsWidth;
 	std::unique_ptr<Graphics> ptrGfx;
+	std::unique_ptr<Mouse> ptrMouse;
 
 	static LRESULT CALLBACK MsgSetup(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static LRESULT CALLBACK MsgRoutineHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

@@ -12,6 +12,12 @@ public:
 	Mouse(const Mouse&) = delete;
 	Mouse& operator=(const Mouse&) = delete;
 
+	const Pos& get_pos() const noexcept;
+	std::int32_t get_pos_x() const noexcept;
+	std::int32_t get_pos_y() const noexcept;
+	bool get_lbstate() const noexcept;
+	bool get_rbstate() const noexcept;
+
 	void on_left_click(Pos pos) noexcept;
 	void on_left_release(Pos pos) noexcept;
 	void on_right_click(Pos pos) noexcept;
@@ -23,8 +29,6 @@ private:
 	void trim_buffer() noexcept;
 
 	class Event {
-	private:
-		Pos posCursor;
 	public:
 		enum class Type {
 			LClick,
@@ -37,8 +41,12 @@ private:
 		Event(Type t, Pos p) noexcept;
 		~Event() = default;
 		Event(const Event&) = delete;
-		Event& operator=(const Event&);
+		Event& operator=(const Event&) = delete;
+	private:
+		Pos posCursor;
+		Type t;
 	};
+
 
 	bool bIsLeftPressed;
 	bool bIsRightPressed;
