@@ -6,6 +6,7 @@
 #include "WMMap.h"
 #include "../Graphics/clmGraphics.h"
 #include "Mouse.h"
+#include "../Graphics/GUI/UIManager.h"
 
 #ifndef WINSTUFF_H
 #define WINSTUFF_H
@@ -18,6 +19,7 @@ private:
 	POINTS ptsWidth;
 	std::unique_ptr<Graphics> ptrGfx;
 	std::unique_ptr<Mouse> ptrMouse;
+	std::unique_ptr<UIManager> ptrUI;
 
 	static LRESULT CALLBACK MsgSetup(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static LRESULT CALLBACK MsgRoutineHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -57,6 +59,7 @@ public:
 
 	static std::optional<int> ProcessMessages();
 	Graphics& gfx() const noexcept;
+	UIManager& ui() const noexcept;
 
 	void Start();	// DEPRECATED
 };

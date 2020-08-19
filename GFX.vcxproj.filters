@@ -48,6 +48,12 @@
     <ClInclude Include="GFX\Windows\Mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GFX\Graphics\GUI\UIManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GFX\Graphics\GUI\UIBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="GFX\Graphics\Shaders\PSmain.hlsl">
@@ -83,6 +89,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GFX\Windows\Mouse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GFX\Graphics\GUI\UIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GFX\Graphics\GUI\Panel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

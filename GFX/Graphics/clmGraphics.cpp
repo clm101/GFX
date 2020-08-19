@@ -124,7 +124,6 @@ Graphics::Graphics(HWND hwnd) {
 		NULL };
 	CLM_EXCEPT_GFX_HR_INFO(ptrD2DDeviceContext->CreateBitmapFromDxgiSurface(ptrDXGISurface.Get(), dbpBitmapProp, &ptrBitmap));
 	ptrD2DDeviceContext->SetTarget(ptrBitmap);
-	brush = nullptr;
 	
 	// Create render target view for D3D11
 	ID3D11Resource* pBackBuffer = nullptr;
@@ -155,7 +154,6 @@ Graphics::Graphics(HWND hwnd) {
 
 Graphics::~Graphics() {
 	DESTRUCTOR_CONFIRM(~Graphics);
-	SafeRelease(brush);
 	SafeRelease(ptrBitmap);
 	SafeRelease(ptrD2DDeviceContext);
 	SafeRelease(ptrD2DDevice);
@@ -174,16 +172,12 @@ float getrandom() noexcept {
 	return (float)r() / (float)UINT_MAX;
 }
 
-void Graphics::BeginFrame(const double fTime) {
-	ClearBuffer(fTime);
+void Graphics::BeginFrame(UIManager& ui) {
+	//ClearBuffer(fTime);
 	static HRESULT hr;
 
-	if (brush == nullptr) {
-		CLM_EXCEPT_GFX_HR_INFO(ptrD2DDeviceContext->CreateSolidColorBrush(D2D1::ColorF( getrandom(), getrandom(), getrandom()), &brush));
-	}
-
 	ptrD2DDeviceContext->BeginDraw();
-	ptrD2DDeviceContext->FillRectangle({ 0.f, 0.f, 100.f, 100.f }, brush);
+	ui.draw(ptrD2DDeviceContext);
 	CLM_EXCEPT_GFX_HR_INFO(ptrD2DDeviceContext->EndDraw());
 
 	//struct Vertex {

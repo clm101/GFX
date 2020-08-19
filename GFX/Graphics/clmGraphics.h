@@ -14,6 +14,7 @@
 #include "DxgiInfoManager.h"
 #include "../ExceptionBase.h"
 #include "../DebugDefines/GraphicsDebugDefines.h"
+#include "GUI/UIManager.h"
 
 namespace mswrl = Microsoft::WRL;
 
@@ -34,7 +35,6 @@ private:
 	ID2D1DeviceContext* ptrD2DDeviceContext;
 	//IDXGISurface* ptrDXGISurface;
 	ID2D1Bitmap1* ptrBitmap;
-	ID2D1SolidColorBrush* brush;
 
 	// Pixel Shader
 	mswrl::ComPtr<ID3D11PixelShader> ptrPixelShader;
@@ -73,7 +73,7 @@ public:
 	Graphics(const Graphics&) = delete;
 	Graphics& operator=(const Graphics&) = delete;
 
-	void BeginFrame(const double);
+	void BeginFrame(UIManager&);
 	void EndFrame();
 	void ClearBuffer(const double);
 };
@@ -86,4 +86,6 @@ inline void SafeRelease(T* ptr) {
 	}
 	return;
 }
+
+float getrandom() noexcept;
 #endif

@@ -109,6 +109,7 @@ Window::Window(const wchar_t* pWindowName, short sWidth, short sHeight)
 
 	ptrGfx = std::make_unique<Graphics>(hwnd);
 	ptrMouse = std::make_unique<Mouse>();
+	ptrUI = std::make_unique<UIManager>(uib::Rect{ 0, 0, (std::int32_t)sWidth, (std::int32_t)sHeight });
 }
 
 // Destructor
@@ -213,4 +214,8 @@ std::optional<int> Window::ProcessMessages() {
 
 Graphics& Window::gfx() const noexcept {
 	return *ptrGfx;
+}
+
+UIManager& Window::ui() const noexcept {
+	return *ptrUI;
 }

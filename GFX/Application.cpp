@@ -15,7 +15,7 @@ int Application::Start() {
 }
 
 void Application::DoFrame(const float fTime) const {
-	ptrWnd->gfx().BeginFrame(fTime);
+	ptrWnd->gfx().BeginFrame(ptrWnd->ui());
 
 	ptrWnd->gfx().EndFrame();
 }
