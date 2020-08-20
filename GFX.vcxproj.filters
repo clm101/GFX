@@ -103,7 +103,7 @@
     <ClCompile Include="GFX\Graphics\GUI\Zone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GFX\Graphics\GUI\UIBaseElement.cpp">
+    <ClCompile Include="GFX\Graphics\GUI\UIBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

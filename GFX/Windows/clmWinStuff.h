@@ -1,3 +1,6 @@
+#ifndef WINSTUFF_H
+#define WINSTUFF_H
+
 #include "WindowsInclude.h"
 #include <string>
 #include <memory>
@@ -5,11 +8,12 @@
 #include "../ExceptionBase.h"
 #include "WMMap.h"
 #include "../Graphics/clmGraphics.h"
-#include "Mouse.h"
 #include "../Graphics/GUI/UIManager.h"
 
-#ifndef WINSTUFF_H
-#define WINSTUFF_H
+//#ifndef MOUSE_H
+//#include "Mouse.h"
+//#endif
+class Mouse;
 
 class Window {
 private:
@@ -18,7 +22,6 @@ private:
 	const wchar_t* pWindowName;
 	POINTS ptsWidth;
 	std::unique_ptr<Graphics> ptrGfx;
-	std::unique_ptr<Mouse> ptrMouse;
 	std::unique_ptr<UIManager> ptrUI;
 
 	static LRESULT CALLBACK MsgSetup(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -57,9 +60,13 @@ public:
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
 
+	std::unique_ptr<Mouse> ptrMouse;
+
 	static std::optional<int> ProcessMessages();
 	Graphics& gfx() const noexcept;
 	UIManager& ui() const noexcept;
+	const HINSTANCE& inst() const noexcept;
+	void process_input();
 
 	void Start();	// DEPRECATED
 };

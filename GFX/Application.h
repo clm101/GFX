@@ -1,9 +1,9 @@
+#ifndef APPLICATION_H
+#define APPLICATION_H
+
 #include "Windows/clmWinStuff.h"
 #include "clmTimer.h"
 #include <memory>
-
-#ifndef APPLICATION_H
-#define APPLICATION_H
 
 class Application {
 private:
@@ -15,6 +15,7 @@ public:
 	Application& operator=(const Application) = delete;
 
 	int Start();
+	void process_input();
 	void DoFrame(const float) const;
 };
 

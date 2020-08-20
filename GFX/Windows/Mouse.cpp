@@ -1,12 +1,20 @@
 #include <queue>
 #include "Mouse.h"
+#include "clmWinStuff.h"
 
-Mouse::Mouse() noexcept {
+Mouse::Mouse(const Window& win) noexcept
+	:
+	win(win)
+{
 	bIsLeftPressed = false;
 	bIsRightPressed = false;
 	posCursor = { 0, 0 };
-	hCursor = 
+	hCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(IDC_ARROW), 2u, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
+	SetCursor(hCursor);
+	ct = CursorType::Normal;
 }
+
+Mouse::Event::Event(Type t, Pos p) noexcept : t(t), posCursor(p) {}
 
 const Mouse::Pos& Mouse::get_pos() const noexcept {
 	return posCursor;
@@ -64,4 +72,42 @@ void Mouse::trim_buffer() noexcept {
 	}
 }
 
-Mouse::Event::Event(Type t, Pos p) noexcept : t(t), posCursor(p) {}
+std::optional<Mouse::Event> Mouse::get_next_event() noexcept {
+	if (buffer.size() != 0) {
+		Mouse::Event e = buffer.front();
+		buffer.pop();
+		return { e };
+	}
+	return {};
+}
+
+void Mouse::update_cursor_pos(Pos pos) noexcept {
+	posCursor = pos;
+}
+
+void Mouse::update_cursor(CursorType ct_in) noexcept {
+	if (ct_in != ct) {
+		ct = ct_in;
+		switch (ct) {
+		case CursorType::Normal:
+		{
+			hCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(IDC_ARROW), 2u, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
+			break;
+		}
+		case CursorType::Resize:
+		{
+			hCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(IDC_SIZEWE), 2u, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
+			break;
+		}
+		}
+		SetCursor(hCursor);
+	}
+}
+
+Mouse::Event::Type Mouse::Event::get_type() const noexcept {
+	return t;
+}
+
+const Mouse::Pos& Mouse::Event::get_cursor_pos() const noexcept {
+	return posCursor;
+}

@@ -6,7 +6,7 @@
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow) {
 	int nRet{ 0 };
 	try {
-		Application app(L"Test window", 1000, 1000);
+		Application app(L"Test window", 1280, 720);
 		nRet = app.Start();
 	}
 	catch (ExceptionBase& e) {

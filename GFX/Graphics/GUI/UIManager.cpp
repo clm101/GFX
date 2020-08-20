@@ -43,8 +43,6 @@ void UIManager::create_zone_split_panel(std::unique_ptr<UIBase>& ptr, const Spli
 	ptrTmp = nullptr;
 }
 
-
-
 void UIManager::find_and_split_panel(UIBase* ptr, const Pos& pos, const SplitType& st) noexcept {
 	ElementType t = (ElementType)*ptr;
 	switch ((ElementType)*ptr) {
@@ -96,4 +94,14 @@ void UIManager::split_panel(Pos pos, SplitType st) noexcept {
 		find_and_split_panel(this, pos, st);
 	}
 	return;
+}
+
+bool UIManager::cursor_in_resize_region(const Pos& pos) const noexcept {
+	return (cursor_in_resize_region_util(ptrFirst, pos) || cursor_in_resize_region_util(ptrSecond, pos));
+}
+
+bool UIManager::cursor_in_resize_region_util(const std::unique_ptr<UIBase>& ptr, const Pos& pos) noexcept {
+	if (ptr != nullptr) {
+		return ptr->cursor_in_resize_region(pos);
+	}
 }

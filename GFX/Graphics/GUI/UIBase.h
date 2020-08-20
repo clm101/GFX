@@ -1,9 +1,9 @@
+#ifndef UI_BASE_H
+#define UI_BASE_H
+
 #include <d2d1.h>
 #include <d2d1_1.h>
 #include <memory>
-
-#ifndef UI_BASE_H
-#define UI_BASE_H
 
 namespace uib {
 	struct Rect {
@@ -34,6 +34,7 @@ public:
 	};
 	virtual operator ElementType() = 0;
 	virtual bool contains_cursor(Pos) noexcept { return true; }
+	virtual bool cursor_in_resize_region(const Pos& pos) const noexcept;
 };
 
 class Panel : public UIBase {
@@ -69,6 +70,7 @@ public:
 	Zone(const uib::Rect dim_in, UIBase* ptrFirst_in = nullptr, UIBase* ptrSecond_in = nullptr) noexcept;
 	void draw(ID2D1DeviceContext* ptrContext) override;
 	operator ElementType() override { return ElementType::Zone; }
+	bool cursor_in_resize_region(const Pos& pos) const noexcept override;
 };
 
 #endif

@@ -1,6 +1,7 @@
 #include <windowsx.h>
 #include "clmWinStuff.h"
 #include "../DebugDefines/WinDebugDefines.h"
+#include "Mouse.h"
 
 /**********************************/
 /***	EXCEPTION HANDLING		***/
@@ -108,7 +109,7 @@ Window::Window(const wchar_t* pWindowName, short sWidth, short sHeight)
 	ShowWindow(hwnd, SW_SHOW);
 
 	ptrGfx = std::make_unique<Graphics>(hwnd);
-	ptrMouse = std::make_unique<Mouse>();
+	ptrMouse = std::make_unique<Mouse>(*this);
 	WINDOWINFO wiInfo{};
 	wiInfo.cbSize = sizeof(WINDOWINFO);
 	GetWindowInfo(hwnd, &wiInfo);
@@ -193,6 +194,8 @@ LRESULT CALLBACK Window::MsgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 		ptrMouse->on_right_release({ (std::int32_t)GET_X_LPARAM(lParam), (std::int32_t)GET_Y_LPARAM(lParam) });
 		break;
 	}
+	case WM_MOUSEMOVE:
+		ptrMouse->on_move({ (std::int32_t)GET_X_LPARAM(lParam), (std::int32_t)GET_Y_LPARAM(lParam) });
 	default:
 		break;
 	}
@@ -221,4 +224,8 @@ Graphics& Window::gfx() const noexcept {
 
 UIManager& Window::ui() const noexcept {
 	return *ptrUI;
+}
+
+const HINSTANCE& Window::inst() const noexcept {
+	return hInst;
 }

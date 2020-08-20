@@ -1,9 +1,8 @@
-#include <memory>
-#include <vector>
-
 #ifndef UI_MANAGER_H
 #define UI_MANAGER_H
 
+#include <memory>
+#include <vector>
 #include "UIBase.h"
 
 struct Dimensions {
@@ -21,6 +20,8 @@ public:
 	operator ElementType() override { return ElementType::UIManager; }
 	void draw(ID2D1DeviceContext* ptrContext) noexcept override;
 	void split_panel(Pos, SplitType) noexcept;
+	bool cursor_in_resize_region(const Pos& pos) const noexcept override;
+	static bool cursor_in_resize_region_util(const std::unique_ptr<UIBase>& ptr, const Pos& pos) noexcept;
 private:
 	std::unique_ptr<UIBase> ptrFirst;
 	std::unique_ptr<UIBase> ptrSecond;

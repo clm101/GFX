@@ -21,6 +21,6 @@ bool Zone::contains_cursor(Pos pos) noexcept {
 		((pos.second > dim.nTop) && (pos.second < dim.nBottom));
 }
 
-void Zone::find_and_split_panel(const Pos&, const SplitType&) noexcept {
-
+bool Zone::cursor_in_resize_region(const Pos& pos) const noexcept {
+	return (UIManager::cursor_in_resize_region_util(ptrFirst, pos) || UIManager::cursor_in_resize_region_util(ptrSecond, pos));
 }
