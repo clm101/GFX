@@ -1,7 +1,7 @@
 #ifndef WINDOWS_INCLUDE_H
 #define WINDOWS_INCLUDE_H
 
-#define OEM_RESOURCE
+#define OEMRESOURCE
 #include <Windows.h>
 
 #endif

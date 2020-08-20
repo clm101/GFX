@@ -16,11 +16,16 @@ void Zone::draw(ID2D1DeviceContext* ptrContext) {
 	}
 }
 
-bool Zone::contains_cursor(Pos pos) noexcept {
+bool Zone::contains_cursor(const Pos& pos) const noexcept {
 	return ((pos.first > dim.nLeft) && (pos.first < dim.nRight)) &&
 		((pos.second > dim.nTop) && (pos.second < dim.nBottom));
 }
 
-bool Zone::cursor_in_resize_region(const Pos& pos) const noexcept {
-	return (UIManager::cursor_in_resize_region_util(ptrFirst, pos) || UIManager::cursor_in_resize_region_util(ptrSecond, pos));
+void Zone::cursor_in_resize_region(const Pos& pos, std::vector<UIResize>& v) const noexcept {
+	if (ptrFirst != nullptr) {
+		ptrFirst->cursor_in_resize_region(pos, v);
+	}
+	if (ptrSecond != nullptr) {
+		ptrSecond->cursor_in_resize_region(pos, v);
+	}
 }

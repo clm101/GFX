@@ -9,7 +9,7 @@ Mouse::Mouse(const Window& win) noexcept
 	bIsLeftPressed = false;
 	bIsRightPressed = false;
 	posCursor = { 0, 0 };
-	hCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(IDC_ARROW), 2u, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
+	hCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(OCR_NORMAL), 2u, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
 	SetCursor(hCursor);
 	ct = CursorType::Normal;
 }
@@ -91,12 +91,22 @@ void Mouse::update_cursor(CursorType ct_in) noexcept {
 		switch (ct) {
 		case CursorType::Normal:
 		{
-			hCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(IDC_ARROW), 2u, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
+			hCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(OCR_NORMAL), 2u, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
 			break;
 		}
-		case CursorType::Resize:
+		case CursorType::ResizeEW:
 		{
-			hCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(IDC_SIZEWE), 2u, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
+			hCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(OCR_SIZEWE), 2u, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
+			break;
+		}
+		case CursorType::ResizeNS:
+		{
+			hCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(OCR_SIZENS), 2u, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
+			break;
+		}
+		case CursorType::ResizeNSEW:
+		{
+			hCursor = (HCURSOR)LoadImage(NULL, MAKEINTRESOURCE(OCR_SIZEALL), 2u, 0, 0, LR_SHARED | LR_DEFAULTSIZE);
 			break;
 		}
 		}

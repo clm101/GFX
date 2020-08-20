@@ -96,12 +96,18 @@ void UIManager::split_panel(Pos pos, SplitType st) noexcept {
 	return;
 }
 
-bool UIManager::cursor_in_resize_region(const Pos& pos) const noexcept {
-	return (cursor_in_resize_region_util(ptrFirst, pos) || cursor_in_resize_region_util(ptrSecond, pos));
-}
-
-bool UIManager::cursor_in_resize_region_util(const std::unique_ptr<UIBase>& ptr, const Pos& pos) noexcept {
-	if (ptr != nullptr) {
-		return ptr->cursor_in_resize_region(pos);
+void UIManager::cursor_in_resize_region(const Pos& pos, std::vector<UIResize>& v) const noexcept {
+	if (ptrFirst != nullptr) {
+		ptrFirst->cursor_in_resize_region(pos, v);
+	}
+	if (ptrSecond != nullptr) {
+		ptrSecond->cursor_in_resize_region(pos, v);
 	}
 }
+
+//void UIManager::cursor_in_resize_region_util(const std::unique_ptr<UIBase>& ptr, const Pos& pos, std::vector<UIResize>& v) noexcept {
+//	if (ptr != nullptr) {
+//		return ptr->cursor_in_resize_region(pos);
+//	}
+//	return { false };
+//}

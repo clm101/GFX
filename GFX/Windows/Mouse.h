@@ -30,7 +30,9 @@ public:
 
 	enum class CursorType {
 		Normal,
-		Resize
+		ResizeEW,
+		ResizeNS,
+		ResizeNSEW
 	};
 private:
 	static constexpr std::uint8_t nBufferSize = 16u;

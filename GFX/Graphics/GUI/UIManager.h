@@ -20,16 +20,12 @@ public:
 	operator ElementType() override { return ElementType::UIManager; }
 	void draw(ID2D1DeviceContext* ptrContext) noexcept override;
 	void split_panel(Pos, SplitType) noexcept;
-	bool cursor_in_resize_region(const Pos& pos) const noexcept override;
-	static bool cursor_in_resize_region_util(const std::unique_ptr<UIBase>& ptr, const Pos& pos) noexcept;
+	void cursor_in_resize_region(const Pos& pos, std::vector<UIResize>& v) const noexcept override;
+	//static void cursor_in_resize_region_util(const std::unique_ptr<UIBase>& ptr, const Pos& pos, std::vector<UIResize>& v) noexcept;
 private:
 	std::unique_ptr<UIBase> ptrFirst;
 	std::unique_ptr<UIBase> ptrSecond;
 
-	enum class WhichPanel {
-		First,
-		Second
-	};
 	template<typename T>
 	static void find_and_split_panel_util(T* ptr, const Pos& pos, const SplitType& st) noexcept;
 	static void create_zone_split_panel(std::unique_ptr<UIBase>& ptr, const SplitType& st) noexcept;
