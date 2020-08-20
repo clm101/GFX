@@ -1,9 +1,9 @@
 #ifndef WMMAP_H
 #define WMMAP_H
 
+#include "WindowsInclude.h"
 #include <string>
 #include <unordered_map>
-#include "Windows.h"
 
 #define REGISTER_MESSAGE(msg) {msg, L#msg}
 

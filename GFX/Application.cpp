@@ -6,6 +6,9 @@ Application::Application(const wchar_t* wWindowName, short sWidth, short sHeight
 }
 
 int Application::Start() {
+	ptrWnd->ui().split_panel({ 100, 100 }, UIBase::SplitType::Vertical);
+	ptrWnd->ui().split_panel({ 100, 100 }, UIBase::SplitType::Vertical);
+	ptrWnd->ui().split_panel({ 100, 100 }, UIBase::SplitType::Horizontal);
 	while (true) {
 		if (const auto ret = Window::ProcessMessages()) {
 			return *ret;

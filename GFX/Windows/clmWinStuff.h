@@ -1,4 +1,4 @@
-#include <Windows.h>
+#include "WindowsInclude.h"
 #include <string>
 #include <memory>
 #include <optional>

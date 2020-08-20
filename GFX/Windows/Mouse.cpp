@@ -5,6 +5,7 @@ Mouse::Mouse() noexcept {
 	bIsLeftPressed = false;
 	bIsRightPressed = false;
 	posCursor = { 0, 0 };
+	hCursor = 
 }
 
 const Mouse::Pos& Mouse::get_pos() const noexcept {

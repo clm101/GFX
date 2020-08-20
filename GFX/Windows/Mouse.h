@@ -1,3 +1,4 @@
+#include "WindowsInclude.h"
 #include <queue>
 #include <cstdint>
 
@@ -52,6 +53,7 @@ private:
 	bool bIsRightPressed;
 	Pos posCursor;
 	std::queue<Event> buffer;
+	HCURSOR hCursor;
 };
 
 #endif

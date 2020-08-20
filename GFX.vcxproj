@@ -89,6 +89,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -108,6 +109,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -127,6 +129,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -146,6 +149,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -171,6 +175,7 @@
     <ClInclude Include="GFX\Graphics\GUI\UIManager.h" />
     <ClInclude Include="GFX\Windows\clmWinStuff.h" />
     <ClInclude Include="GFX\Windows\Mouse.h" />
+    <ClInclude Include="GFX\Windows\WindowsInclude.h" />
     <ClInclude Include="GFX\Windows\WMMap.h" />
   </ItemGroup>
   <ItemGroup>
@@ -194,7 +199,9 @@
     <ClCompile Include="GFX\Graphics\clmGraphics.cpp" />
     <ClCompile Include="GFX\Graphics\DxgiInfoManager.cpp" />
     <ClCompile Include="GFX\Graphics\GUI\Panel.cpp" />
+    <ClCompile Include="GFX\Graphics\GUI\UIBaseElement.cpp" />
     <ClCompile Include="GFX\Graphics\GUI\UIManager.cpp" />
+    <ClCompile Include="GFX\Graphics\GUI\Zone.cpp" />
     <ClCompile Include="GFX\main.cpp" />
     <ClCompile Include="GFX\Windows\Mouse.cpp" />
     <ClCompile Include="GFX\Windows\WinStuff.cpp" />

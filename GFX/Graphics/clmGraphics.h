@@ -1,7 +1,7 @@
 #ifndef CLM_GRAPHICS_H
 #define CLM_GRAPHICS_H
 
-#include <Windows.h>
+#include "../Windows/WindowsInclude.h"
 #include <d3d11.h>
 #include <windows.foundation.h>
 #include <wrl\wrappers\corewrappers.h>

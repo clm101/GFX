@@ -109,7 +109,10 @@ Window::Window(const wchar_t* pWindowName, short sWidth, short sHeight)
 
 	ptrGfx = std::make_unique<Graphics>(hwnd);
 	ptrMouse = std::make_unique<Mouse>();
-	ptrUI = std::make_unique<UIManager>(uib::Rect{ 0, 0, (std::int32_t)sWidth, (std::int32_t)sHeight });
+	WINDOWINFO wiInfo{};
+	wiInfo.cbSize = sizeof(WINDOWINFO);
+	GetWindowInfo(hwnd, &wiInfo);
+	ptrUI = std::make_unique<UIManager>(uib::Rect{ 0, 0, (std::int32_t)(wiInfo.rcClient.right - wiInfo.rcClient.left), (std::int32_t)(wiInfo.rcClient.bottom - wiInfo.rcClient.top) });
 }
 
 // Destructor

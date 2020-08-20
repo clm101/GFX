@@ -1,4 +1,4 @@
-#include <Windows.h>
+#include "Windows/WindowsInclude.h"
 #include <d3d11.h>
 #include "Windows/clmWinStuff.h"
 #include "Application.h"

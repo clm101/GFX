@@ -54,6 +54,9 @@
     <ClInclude Include="GFX\Graphics\GUI\UIBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GFX\Windows\WindowsInclude.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="GFX\Graphics\Shaders\PSmain.hlsl">
@@ -95,6 +98,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GFX\Graphics\GUI\Panel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GFX\Graphics\GUI\Zone.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GFX\Graphics\GUI\UIBaseElement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
