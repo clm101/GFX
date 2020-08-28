@@ -164,6 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GFX\Application.h" />
+    <ClInclude Include="GFX\clmRandom.h" />
     <ClInclude Include="GFX\clmTimer.h" />
     <ClInclude Include="GFX\DebugDefines\BaseDebugDefines.h" />
     <ClInclude Include="GFX\DebugDefines\GraphicsDebugDefines.h" />
@@ -171,7 +172,7 @@
     <ClInclude Include="GFX\ExceptionBase.h" />
     <ClInclude Include="GFX\Graphics\clmGraphics.h" />
     <ClInclude Include="GFX\Graphics\DxgiInfoManager.h" />
-    <ClInclude Include="GFX\Graphics\GUI\UIBase.h" />
+    <ClInclude Include="GFX\Graphics\GUI\UIBaseElem.h" />
     <ClInclude Include="GFX\Graphics\GUI\UIManager.h" />
     <ClInclude Include="GFX\Windows\clmWinStuff.h" />
     <ClInclude Include="GFX\Windows\Mouse.h" />
@@ -194,12 +195,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GFX\Application.cpp" />
+    <ClCompile Include="GFX\clmRandom.cpp" />
     <ClCompile Include="GFX\clmTimer.cpp" />
     <ClCompile Include="GFX\ExceptionBase.cpp" />
     <ClCompile Include="GFX\Graphics\clmGraphics.cpp" />
     <ClCompile Include="GFX\Graphics\DxgiInfoManager.cpp" />
     <ClCompile Include="GFX\Graphics\GUI\Panel.cpp" />
-    <ClCompile Include="GFX\Graphics\GUI\UIBase.cpp" />
+    <ClCompile Include="GFX\Graphics\GUI\UIBaseElem.cpp" />
     <ClCompile Include="GFX\Graphics\GUI\UIManager.cpp" />
     <ClCompile Include="GFX\Graphics\GUI\Zone.cpp" />
     <ClCompile Include="GFX\main.cpp" />

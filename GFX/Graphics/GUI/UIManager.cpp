@@ -1,10 +1,11 @@
 #include "UIManager.h"
 
-UIManager::UIManager(uib::Rect r) noexcept
+UIManager::UIManager(UI::Rect r) noexcept
 {
-	dim = r;
-	ptrFirst = std::make_unique<Panel>(dim);
+	rBorder = r;
+	ptrFirst = std::make_unique<Panel>(rBorder);
 	ptrSecond = nullptr;
+	bFlags = std::byte{ 0 };
 }
 
 void UIManager::draw(ID2D1DeviceContext* ptrContext) noexcept {
@@ -16,92 +17,144 @@ void UIManager::draw(ID2D1DeviceContext* ptrContext) noexcept {
 	}
 }
 
-void UIManager::create_zone_split_panel(std::unique_ptr<UIBase>& ptr, const SplitType& st) noexcept {
-	uib::Rect rZone{ ptr->dim };
-	uib::Rect rFirst{};
-	uib::Rect rSecond{};
-	switch (st) {
-	case SplitType::Horizontal:
-	{
-		rFirst = { rZone.nLeft, rZone.nTop, rZone.nRight, (rZone.nBottom + rZone.nTop) / 2 };
-		rSecond = { rZone.nLeft, (rZone.nBottom + rZone.nTop) / 2, rZone.nRight, rZone.nBottom};
-		break;
-	}
-	case SplitType::Vertical:
-	{
-		rFirst = { rZone.nLeft, rZone.nTop, (rZone.nRight + rZone.nLeft) / 2, rZone.nBottom };
-		rSecond = { (rZone.nRight + rZone.nLeft) / 2, rZone.nTop, rZone.nRight, rZone.nBottom };
-		break;
-	}
-	}
 
-	Panel* ptrTmp = (Panel*)ptr.release();
-	ptrTmp->set_dim(rFirst);
-	ptr = std::make_unique<Zone>(rZone);
-	((Zone*)ptr.get())->ptrFirst.reset(ptrTmp);
-	((Zone*)ptr.get())->ptrSecond = std::make_unique<Panel>(rSecond);
-	ptrTmp = nullptr;
+void UIManager::create_zone_split_panel(const UIBESelect s, const UI::Axis& a) noexcept {
+	using uia = UI::Axis;
+	using uis = UI::Side;
+	UI::Rect rZoneDim{};
+	UI::Rect rFirstDim{};
+	UI::Rect rSecondDim{};
+
+	if (s == UIBESelect::First) {
+		rZoneDim = std::move(ptrFirst->rBorder);
+		if (a == uia::Horizontal) {
+			rFirstDim.set_sides(rZoneDim.get_ptr(uis::Left), rZoneDim.get_ptr(uis::Top),
+				rZoneDim.get_ptr(uis::Right), (rZoneDim[uis::Top] + rZoneDim[uis::Bottom]) / 2);
+			rSecondDim.set_sides(rZoneDim.get_ptr(uis::Left), rFirstDim.get_ptr(uis::Bottom),
+				rZoneDim.get_ptr(uis::Right), rZoneDim.get_ptr(uis::Bottom));
+		}
+		else {
+			rFirstDim.set_sides(rZoneDim.get_ptr(uis::Left), rZoneDim.get_ptr(uis::Top),
+				(rZoneDim[uis::Left] + rZoneDim[uis::Right]) / 2, rZoneDim.get_ptr(uis::Bottom));
+			rSecondDim.set_sides(rFirstDim.get_ptr(uis::Right), rZoneDim.get_ptr(uis::Top),
+				rZoneDim.get_ptr(uis::Right), rZoneDim.get_ptr(uis::Bottom));
+		}
+
+		std::unique_ptr<Zone> ptrZone = std::make_unique<Zone>(std::move(rZoneDim));
+		ptrFirst->rBorder = std::move(rFirstDim);
+		ptrZone->ptrFirst = std::move(ptrFirst);
+		ptrZone->ptrSecond = std::make_unique<Panel>(rSecondDim);
+		ptrFirst = std::move(ptrZone);
+	}
+	else {
+		rZoneDim = std::move(ptrSecond->rBorder);
+		if (a == uia::Horizontal) {
+			rFirstDim.set_sides(rZoneDim.get_ptr(uis::Left), rZoneDim.get_ptr(uis::Top),
+				rZoneDim.get_ptr(uis::Right), (rZoneDim[uis::Top] + rZoneDim[uis::Bottom]) / 2);
+			rSecondDim.set_sides(rZoneDim.get_ptr(uis::Left), rFirstDim.get_ptr(uis::Bottom),
+				rZoneDim.get_ptr(uis::Right), rZoneDim.get_ptr(uis::Bottom));
+		}
+		else {
+			rFirstDim.set_sides(rZoneDim.get_ptr(uis::Left), rZoneDim.get_ptr(uis::Top),
+				(rZoneDim[uis::Left] + rZoneDim[uis::Right]) / 2, rZoneDim.get_ptr(uis::Bottom));
+			rSecondDim.set_sides(rFirstDim.get_ptr(uis::Right), rZoneDim.get_ptr(uis::Top),
+				rZoneDim.get_ptr(uis::Right), rZoneDim.get_ptr(uis::Bottom));
+		}
+		std::unique_ptr<Zone> ptrZone = std::make_unique<Zone>(std::move(rZoneDim));
+		ptrSecond->rBorder = std::move(rSecondDim);
+		ptrZone->ptrSecond = std::move(ptrSecond);
+		ptrZone->ptrFirst = std::make_unique<Panel>(rFirstDim);
+		ptrSecond = std::move(ptrZone);
+	}
 }
 
-void UIManager::find_and_split_panel(UIBase* ptr, const Pos& pos, const SplitType& st) noexcept {
-	ElementType t = (ElementType)*ptr;
-	switch ((ElementType)*ptr) {
-	case ElementType::UIManager:
-	{
-		UIManager* ptrTmp = (UIManager*)ptr;
-		find_and_split_panel_util(ptrTmp, pos, st);
-		break;
-	}
-	case ElementType::Zone:
-	{
-		Zone* ptrTmp = (Zone*)ptr;
-		find_and_split_panel_util(ptrTmp, pos, st);
-		break;
-	}
-	default:
-		break;
-	}
+void UIManager::find_and_split_panel(const UI::Pos& pos, const UI::Axis& a) noexcept {
+	
 }
 
-void UIManager::split_panel(Pos pos, SplitType st) noexcept {
+void UIManager::split_panel(UI::Pos p, UI::Axis a) noexcept {
+	using uis = UI::Side;
+	using uia = UI::Axis;
 	if (ptrSecond == nullptr) {
-		Panel* ptrFirstTmp = (Panel*)ptrFirst.get();
-		const uib::Rect rOldDim = ptrFirstTmp->dim;
-		switch (st) {
-		case SplitType::Vertical:
+		Panel* ptrFirstTmp = dynamic_cast<Panel*>(ptrFirst.get());
+		assert(ptrFirst != nullptr);
+		const UI::Rect rOldDim = ptrFirstTmp->rBorder;
+		switch (a) {
+		case uia::Vertical:
 		{
-			ptrFirstTmp->set_dim({
+			/*ptrFirstTmp->set_dim({
 				rOldDim.nLeft, rOldDim.nTop,
-				(rOldDim.nRight + rOldDim.nLeft) / 2, rOldDim.nBottom });
-			ptrSecond = std::make_unique<Panel>(uib::Rect{
-				(rOldDim.nRight + rOldDim.nLeft) / 2, rOldDim.nTop,
-				rOldDim.nRight, rOldDim.nBottom });
+				(rOldDim.nRight + rOldDim.nLeft) / 2, rOldDim.nBottom });*/
+
+			/*ptrFirstTmp->set_dim(0, rOldDim.get_ptr(Side::Left));
+			ptrFirstTmp->set_dim(1, rOldDim.get_ptr(Side::Top));
+			ptrFirstTmp->set_dim(2, (rOldDim[Side::Right] + rOldDim[Side::Left]) / 2);
+			ptrFirstTmp->set_dim(3, rOldDim.get_ptr(Side::Bottom));*/
+
+			/*ptrFirstTmp->set_dim(0, rOldDim.get_ptr(Side::Left), rOldDim.get_ptr(Side::Top),
+				(rOldDim[Side::Right] + rOldDim[Side::Left]) / 2, rOldDim.get_ptr(Side::Bottom));*/
+			ptrFirstTmp->set_dim(rOldDim.get_ptr(uis::Left), rOldDim.get_ptr(uis::Top),
+				(rOldDim[uis::Right] + rOldDim[uis::Left]) / 2, rOldDim.get_ptr(uis::Bottom));
+
+			ptrSecond = std::make_unique<Panel>(ptrFirstTmp->rBorder.get_ptr(uis::Right), rOldDim.get_ptr(uis::Top),
+				rOldDim.get_ptr(uis::Right), rOldDim.get_ptr(uis::Bottom));
+
 			break;
 		}
-		case SplitType::Horizontal:
+		case uia::Horizontal:
 		{
-			ptrFirstTmp->set_dim({
-				rOldDim.nLeft, rOldDim.nTop,
-				rOldDim.nRight, (rOldDim.nBottom + rOldDim.nTop) / 2});
-			ptrSecond = std::make_unique<Panel>(uib::Rect{
-				rOldDim.nLeft, (rOldDim.nBottom + rOldDim.nTop) / 2,
-				rOldDim.nRight, rOldDim.nBottom });
+			//ptrFirstTmp->set_dim({
+			//	rOldDim.nLeft, rOldDim.nTop,
+			//	rOldDim.nRight, (rOldDim.nBottom + rOldDim.nTop) / 2});
+			ptrFirstTmp->set_dim(rOldDim.get_ptr(uis::Left), rOldDim.get_ptr(uis::Top),
+				rOldDim.get_ptr(uis::Right), (rOldDim[uis::Bottom] + rOldDim[uis::Top]) / 2);
+			ptrSecond = std::make_unique<Panel>(rOldDim.get_ptr(uis::Left), ptrFirstTmp->rBorder.get_ptr(uis::Bottom),
+				rOldDim.get_ptr(uis::Right), rOldDim.get_ptr(uis::Bottom));
 			break;
 		}
 		}
 	}
 	else {
-		find_and_split_panel(this, pos, st);
+		if (ptrFirst->contains_cursor(p)) {
+			if (Zone* ptrZone = dynamic_cast<Zone*>(ptrFirst.get())) {
+				ptrZone->find_and_split_panel(p, a);
+			}
+			else {
+				create_zone_split_panel(UIBESelect::First, a);
+			}
+		}
+		else {
+			if (Zone* ptrZone = dynamic_cast<Zone*>(ptrSecond.get())) {
+				ptrZone->find_and_split_panel(p, a);
+			}
+			else {
+				create_zone_split_panel(UIBESelect::Second, a);
+			}
+		}
 	}
 	return;
 }
 
-void UIManager::cursor_in_resize_region(const Pos& pos, std::vector<UIResize>& v) const noexcept {
-	if (ptrFirst != nullptr) {
-		ptrFirst->cursor_in_resize_region(pos, v);
-	}
-	if (ptrSecond != nullptr) {
-		ptrSecond->cursor_in_resize_region(pos, v);
+//void UIManager::cursor_in_resize_region(const UI::Pos& pos, std::vector<UIResize>& v) const noexcept {
+//	if (ptrFirst != nullptr) {
+//		ptrFirst->cursor_in_resize_region(pos, v);
+//	}
+//	if (ptrSecond != nullptr) {
+//		ptrSecond->cursor_in_resize_region(pos, v);
+//	}
+//}
+
+void UIManager::enter_resize_mode() noexcept {
+	bFlags |= RESIZE_MODE;
+}
+
+void UIManager::exit_resize_mode() noexcept {
+	bFlags &= ~RESIZE_MODE;
+}
+
+void UIManager::update_dimensions(const UI::Pos& posCursor) noexcept {
+	if ((bFlags & RESIZE_ACTIVE) == RESIZE_ACTIVE) {
+
 	}
 }
 

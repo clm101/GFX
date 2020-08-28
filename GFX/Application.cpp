@@ -8,9 +8,11 @@ Application::Application(const wchar_t* wWindowName, short sWidth, short sHeight
 }
 
 int Application::Start() {
-	ptrWnd->ui().split_panel({ 100, 100 }, UIBase::SplitType::Vertical);
-	ptrWnd->ui().split_panel({ 100, 100 }, UIBase::SplitType::Vertical);
-	ptrWnd->ui().split_panel({ 100, 100 }, UIBase::SplitType::Horizontal);
+	using uia = UI::Axis;
+	ptrWnd->ui().split_panel({ 100, 100 }, uia::Vertical);
+	ptrWnd->ui().split_panel({ 100, 100 }, uia::Vertical);
+	ptrWnd->ui().split_panel({ 100, 100 }, uia::Horizontal);
+	//ptrWnd->update();
 	while (true) {
 		if (const auto ret = Window::ProcessMessages()) {
 			return *ret;
@@ -22,63 +24,64 @@ int Application::Start() {
 
 void Application::process_input() {
 	while (const auto e = ptrWnd->ptrMouse->get_next_event()) {
-		if (e->get_type() == Mouse::Event::Type::Move) {
-			Mouse::Pos posCursor = e->get_cursor_pos();
-			ptrWnd->ptrMouse->update_cursor_pos(posCursor);
-			std::vector<UIBase::UIResize> vResize{};
-			ptrWnd->ui().cursor_in_resize_region(posCursor, vResize);
-			if (vResize.size() != 0) {
-				std::byte bResizeFlags{ 0 };
-				for (UIBase::UIResize v : vResize) {
-					switch (*v.oResizeDirection) {
-					case UIBase::ResizeDirection::Horizontal:
-					{
-						bResizeFlags |= std::byte{ 0b1 };
-						break;
-					}
-					case UIBase::ResizeDirection::Vertical:
-					{
-						bResizeFlags |= std::byte{ 0b10 };
-						break;
-					}
-					default:
-					{
-						bResizeFlags |= std::byte{ 0b0 };
-						break;
-					}
-					}
-				
-				}
-				switch (bResizeFlags) {
-				case std::byte{ 0b1 }:
-				{
-					ptrWnd->ptrMouse->update_cursor(Mouse::CursorType::ResizeEW);
-					break;
-				}
-				case std::byte{ 0b10 }:
-				{
-					ptrWnd->ptrMouse->update_cursor(Mouse::CursorType::ResizeNS);
-					break;
-				}
-				case std::byte{ 0b11 }:
-				{
-					ptrWnd->ptrMouse->update_cursor(Mouse::CursorType::ResizeNSEW);
-					break;
-				}
-				default:
-				{
-					ptrWnd->ptrMouse->update_cursor(Mouse::CursorType::Normal);
-					break;
-				}
-				}
-			}
-			else {
-				ptrWnd->ptrMouse->update_cursor(Mouse::CursorType::Normal);
-			}
-		}
-		else if (e->get_type() == Mouse::Event::Type::LClick) {
-			int breakpoint = 3;
-		}
+		//if (e->get_type() == Mouse::Event::Type::Move) {
+		//	Mouse::Pos posCursor = e->get_cursor_pos();
+		//	ptrWnd->ptrMouse->update_cursor_pos(posCursor);
+		//	std::vector<UIBase::UIResize> vResize{};
+		//	ptrWnd->ui().cursor_in_resize_region(posCursor, vResize);
+		//	if (vResize.size() != 0) {
+		//		ptrWnd->ui().enter_resize_mode();
+		//		std::byte bResizeFlags{ 0 };
+		//		for (UIBase::UIResize v : vResize) {
+		//			switch (*v.oResizeDirection) {
+		//			case UIBase::Side::Top://change
+		//			{
+		//				bResizeFlags |= std::byte{ 0b1 };
+		//				break;
+		//			}
+		//			case UIBase::Side::Bottom://change
+		//			{
+		//				bResizeFlags |= std::byte{ 0b10 };
+		//				break;
+		//			}
+		//			default:
+		//			{
+		//				bResizeFlags |= std::byte{ 0b0 };
+		//				break;
+		//			}
+		//			}
+		//		
+		//		}
+		//		switch (bResizeFlags) {
+		//		case std::byte{ 0b1 }:
+		//		{
+		//			ptrWnd->ptrMouse->update_cursor(Mouse::CursorType::ResizeEW);
+		//			break;
+		//		}
+		//		case std::byte{ 0b10 }:
+		//		{
+		//			ptrWnd->ptrMouse->update_cursor(Mouse::CursorType::ResizeNS);
+		//			break;
+		//		}
+		//		case std::byte{ 0b11 }:
+		//		{
+		//			ptrWnd->ptrMouse->update_cursor(Mouse::CursorType::ResizeNSEW);
+		//			break;
+		//		}
+		//		default:
+		//		{
+		//			ptrWnd->ptrMouse->update_cursor(Mouse::CursorType::Normal);
+		//			break;
+		//		}
+		//		}
+		//	}
+		//	else {
+		//		ptrWnd->ptrMouse->update_cursor(Mouse::CursorType::Normal);
+		//	}
+		//}
+		//else if (e->get_type() == Mouse::Event::Type::LClick) {
+		//	int breakpoint = 3;
+		//}
 	}
 }
 

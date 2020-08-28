@@ -113,7 +113,7 @@ Window::Window(const wchar_t* pWindowName, short sWidth, short sHeight)
 	WINDOWINFO wiInfo{};
 	wiInfo.cbSize = sizeof(WINDOWINFO);
 	GetWindowInfo(hwnd, &wiInfo);
-	ptrUI = std::make_unique<UIManager>(uib::Rect{ 0, 0, (std::int32_t)(wiInfo.rcClient.right - wiInfo.rcClient.left), (std::int32_t)(wiInfo.rcClient.bottom - wiInfo.rcClient.top) });
+	ptrUI = std::make_unique<UIManager>(UI::Rect{ 0, 0, (std::int32_t)(wiInfo.rcClient.right - wiInfo.rcClient.left), (std::int32_t)(wiInfo.rcClient.bottom - wiInfo.rcClient.top) });
 }
 
 // Destructor
@@ -123,24 +123,6 @@ Window::~Window() {
 		DestroyWindow(hwnd);
 	}
 	CoUninitialize();
-}
-
-// DEPRECATED
-void Window::Start() {
-	ShowWindow(hwnd, SW_SHOW);
-
-	MSG msg{};
-	BOOL bRet = 0;
-	while ((bRet = GetMessage(&msg, nullptr, 0, 0)) != 0) {
-		if (bRet == -1) {
-			CLM_EXCEPT_LAST_NARG();
-		}
-		else if (msg.message == WM_QUIT) {
-			return;
-		}
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
 }
 
 // Initial callback function
@@ -195,7 +177,10 @@ LRESULT CALLBACK Window::MsgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 		break;
 	}
 	case WM_MOUSEMOVE:
+	{
 		ptrMouse->on_move({ (std::int32_t)GET_X_LPARAM(lParam), (std::int32_t)GET_Y_LPARAM(lParam) });
+		break;
+	}
 	default:
 		break;
 	}

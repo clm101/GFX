@@ -1,7 +1,7 @@
 #include <combaseapi.h>
 #include <d3dcompiler.h>
 #include <numbers>
-#include <random>
+#include "../clmRandom.h"
 #include "clmGraphics.h"
 #include "../DebugDefines/GraphicsDebugDefines.h"
 #include "DxgiInfoManager.h"
@@ -165,11 +165,6 @@ void Graphics::ClearBuffer(const double fTime) {
 	float fBlue = 0.5 * (float)(1 + std::sin(2 * std::numbers::pi * 0.1 * fTime));*/
 	const float color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	ptrDeviceContext->ClearRenderTargetView(ptrTarget.Get(), color);
-}
-
-float getrandom() noexcept {
-	static std::random_device r{};
-	return (float)r() / (float)UINT_MAX;
 }
 
 void Graphics::BeginFrame(UIManager& ui) {

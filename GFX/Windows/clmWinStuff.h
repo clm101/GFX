@@ -59,6 +59,7 @@ public:
 	~Window();
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
+	void update();
 
 	std::unique_ptr<Mouse> ptrMouse;
 
@@ -67,8 +68,6 @@ public:
 	UIManager& ui() const noexcept;
 	const HINSTANCE& inst() const noexcept;
 	void process_input();
-
-	void Start();	// DEPRECATED
 };
 
 #endif

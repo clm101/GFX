@@ -86,6 +86,4 @@ inline void SafeRelease(T* ptr) {
 	}
 	return;
 }
-
-float getrandom() noexcept;
 #endif

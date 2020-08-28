@@ -51,10 +51,13 @@
     <ClInclude Include="GFX\Graphics\GUI\UIManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GFX\Graphics\GUI\UIBase.h">
+    <ClInclude Include="GFX\Windows\WindowsInclude.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GFX\Windows\WindowsInclude.h">
+    <ClInclude Include="GFX\Graphics\GUI\UIBaseElem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GFX\clmRandom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -103,7 +106,10 @@
     <ClCompile Include="GFX\Graphics\GUI\Zone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GFX\Graphics\GUI\UIBase.cpp">
+    <ClCompile Include="GFX\Graphics\GUI\UIBaseElem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GFX\clmRandom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
