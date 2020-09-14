@@ -60,6 +60,9 @@
     <ClInclude Include="GFX\clmRandom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GFX\DebugDefines\MemoryDebug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="GFX\Graphics\Shaders\PSmain.hlsl">

@@ -4,6 +4,7 @@
 #include "Windows/clmWinStuff.h"
 #include "clmTimer.h"
 #include <memory>
+#include "DebugDefines/MemoryDebug.h"
 
 class Application {
 private:

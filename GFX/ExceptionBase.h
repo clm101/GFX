@@ -1,6 +1,7 @@
 #ifndef EXCEPTION_BASE_H
 #define EXCEPTION_BASE_H
 
+#include "DebugDefines/MemoryDebug.h"
 #include <exception>
 #include <string>
 #include <sstream>

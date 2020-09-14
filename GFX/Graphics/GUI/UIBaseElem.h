@@ -1,6 +1,8 @@
 #ifndef UI_BASE_H
 #define UI_BASE_H
 
+#define VECTOR_BORDER 0
+
 #include <d2d1.h>
 #include <d2d1_1.h>
 #include <memory>
@@ -12,14 +14,24 @@
 #include <utility>
 #include <cassert>
 #include "../../clmRandom.h"
+#include "../../DebugDefines/MemoryDebug.h"
 
 namespace UI {
-	enum class Side : std::int32_t {
+	struct Side {
+		std::int32_t x;
+
+		constexpr Side(std::int32_t y = 0) : x(y) {}
+
+		constexpr operator std::int32_t() const { return x; }
+
+		static const Side Left, Top, Right, Bottom;
+	};
+	/*enum class Side : std::int32_t {
 		Left = 0,
 		Top = 1,
 		Right = 2,
 		Bottom = 3
-	};
+	};*/
 
 	enum class Axis : std::int32_t {
 		Horizontal = 0,
@@ -83,8 +95,17 @@ public:
 		set_side(uis::Bottom, t4);
 	}
 	virtual ~UIBaseElem() = default;
+	virtual bool cursor_in_resize_region(const UI::Pos& pos) const noexcept;
 };
 
+#if VECTOR_BORDER
+class Panel {
+private:
+
+public:
+	void draw(ID2D1DeviceContext* ptrContext) noexcept;
+};
+#else
 class Panel : public UIBaseElem {
 	friend class UIManager;
 public:
@@ -136,7 +157,7 @@ private:
 	//void set_dim(Side s, std::int32_t n) noexcept;
 	//void set_dim(Side s, std::shared_ptr<std::int32_t> ptr) noexcept;
 };
-
+#endif
 
 class Zone : public UIBaseElem {
 	friend class UIManager;
@@ -152,6 +173,7 @@ public:
 	Zone(UI::Rect&& r_in) noexcept;
 	~Zone() noexcept override = default;
 	void draw(ID2D1DeviceContext* ptrContext) override;
+	bool cursor_in_resize_region(const UI::Pos& p) const noexcept override;
 	//void cursor_in_resize_region(const Pos& pos, std::vector<UIBase::UIResize>& v) const noexcept override;
 };
 

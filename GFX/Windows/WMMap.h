@@ -1,6 +1,7 @@
 #ifndef WMMAP_H
 #define WMMAP_H
 
+#include "../DebugDefines/MemoryDebug.h"
 #include "WindowsInclude.h"
 #include <string>
 #include <unordered_map>

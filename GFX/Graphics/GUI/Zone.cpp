@@ -67,17 +67,6 @@ void Zone::find_and_split_panel(const UI::Pos& pos, const UI::Axis& a) noexcept 
 	}
 }
 
-//bool Zone::contains_cursor(const Pos& pos) const noexcept {
-//	using uis = UI::Side;
-//	return ((pos.first > rBorder[uis::Left]) && (pos.first < rBorder[uis::Right])) &&
-//		((pos.second > rBorder[uis::Top]) && (pos.second < rBorder[uis::Bottom]));
-//}
-
-//void Zone::cursor_in_resize_region(const Pos& pos, std::vector<UIResize>& v) const noexcept {
-//	if (ptrFirst != nullptr) {
-//		ptrFirst->cursor_in_resize_region(pos, v);
-//	}
-//	if (ptrSecond != nullptr) {
-//		ptrSecond->cursor_in_resize_region(pos, v);
-//	}
-//}
+bool Zone::cursor_in_resize_region(const UI::Pos& p) const noexcept {
+	return ptrFirst->cursor_in_resize_region(p) || ptrSecond->cursor_in_resize_region(p);
+}

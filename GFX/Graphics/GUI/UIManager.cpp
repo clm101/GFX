@@ -2,22 +2,89 @@
 
 UIManager::UIManager(UI::Rect r) noexcept
 {
+#if VECTOR_BORDER
+#else
 	rBorder = r;
 	ptrFirst = std::make_unique<Panel>(rBorder);
 	ptrSecond = nullptr;
 	bFlags = std::byte{ 0 };
+#endif
 }
 
 void UIManager::draw(ID2D1DeviceContext* ptrContext) noexcept {
+#if VECTOR_BORDER
+	for (Panel& p : vPanels) {
+		p.draw(ptrContext);
+	}
+#else
 	if (ptrFirst != nullptr) {
 		ptrFirst->draw(ptrContext);
 	}
 	if (ptrSecond != nullptr) {
 		ptrSecond->draw(ptrContext);
 	}
+#endif
 }
 
+#if VECTOR_BORDER
 
+void UIManager::create_panel(const UI::Pos& pos, const UI::Axis& a) noexcept {
+	size_t nStart = 0;
+	size_t nEnd = vVerticalBorders.size();
+	size_t nVecPos = (nStart + nEnd) / 2;
+	while (true) {
+		if (pos.first < vVerticalBorders[nVecPos].nPosition) {
+			nEnd = nVecPos;
+		}
+		else {
+			nStart = nVecPos;
+		}
+		assert(nEnd == nStart);
+		assert((std::int32_t)nEnd - (std::int32_t)nStart > 0);
+		if ((nEnd - nStart) == 1) {
+			break;
+		}
+		nVecPos = (nStart + nEnd) / 2;
+	}
+	auto iVerticalInsert = vVerticalBorders.begin() + nEnd;
+
+	nStart = 0;
+	nEnd = vHorizontalBorders.size();
+	nVecPos = (nStart + nEnd) / 2;
+	while (true) {
+		if (pos.second < *(vHorizontalBorders[nVecPos].ptrPosition)) {
+			nEnd = nVecPos;
+		}
+		else {
+			nStart = nVecPos;
+		}
+		assert(nEnd == nStart);
+		assert((std::int32_t)nEnd - (std::int32_t)nStart > 0);
+		if ((nEnd - nStart) == 1) {
+			break;
+		}
+		nVecPos = (nStart + nEnd) / 2;
+	}
+	auto iHorizontalInsert = vHorizontalBorders.begin() + nEnd;
+
+	Border newBorder{};
+	if (a == UI::Axis::Horizontal) {
+		newBorder.ptrStart = (iVerticalInsert - 1)->ptrPosition;
+		newBorder.ptrEnd = iVerticalInsert->ptrPosition;
+		newBorder.ptrPosition = std::make_shared<std::int32_t>((*((iHorizontalInsert - 1)->ptrPosition) + *(iHorizontalInsert->ptrPosition)) / 2);
+		iHorizontalInsert = vHorizontalBorders.insert(iHorizontalInsert, std::move(newBorder));
+	}
+	else {
+		newBorder.ptrStart = (iHorizontalInsert - 1)->ptrPosition;
+		newBorder.ptrEnd = iHorizontalInsert->ptrPosition;
+		newBorder.ptrPosition = std::make_shared<std::int32_t>((*((iVerticalInsert - 1)->ptrPosition) + *(iVerticalInsert->ptrPosition)) / 2);
+		iVerticalInsert = vVerticalBorders.insert(iVerticalInsert, std::move(newBorder));
+	}
+
+
+}
+
+#else
 void UIManager::create_zone_split_panel(const UIBESelect s, const UI::Axis& a) noexcept {
 	using uia = UI::Axis;
 	using uis = UI::Side;
@@ -134,6 +201,7 @@ void UIManager::split_panel(UI::Pos p, UI::Axis a) noexcept {
 	}
 	return;
 }
+#endif
 
 //void UIManager::cursor_in_resize_region(const UI::Pos& pos, std::vector<UIResize>& v) const noexcept {
 //	if (ptrFirst != nullptr) {
@@ -156,6 +224,22 @@ void UIManager::update_dimensions(const UI::Pos& posCursor) noexcept {
 	if ((bFlags & RESIZE_ACTIVE) == RESIZE_ACTIVE) {
 
 	}
+}
+
+bool UIManager::cursor_in_resize_region(const UI::Pos& p) noexcept {
+#if VECTOR_BORDER
+#else
+	bool bReturn = false;
+
+	if (ptrFirst != nullptr) {
+		bReturn |= ptrFirst->cursor_in_resize_region(p);
+	}
+	if (ptrSecond != nullptr) {
+		bReturn |= ptrSecond->cursor_in_resize_region(p);
+	}
+
+	return bReturn;
+#endif
 }
 
 //void UIManager::cursor_in_resize_region_util(const std::unique_ptr<UIBase>& ptr, const Pos& pos, std::vector<UIResize>& v) noexcept {

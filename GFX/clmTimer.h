@@ -1,6 +1,7 @@
 #ifndef CLM_TIMER_H
 #define CLM_TIMER_H
 
+#include "DebugDefines/MemoryDebug.h"
 #include <chrono>
 
 class clmTimer {

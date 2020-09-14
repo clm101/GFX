@@ -4,6 +4,7 @@
 #include <dxgidebug.h>
 #include <vector>
 #include <string>
+#include "../DebugDefines/MemoryDebug.h"
 
 #ifndef DXGI_INFO_MANAGER_H
 #define DXGI_INFO_MANAGER_H

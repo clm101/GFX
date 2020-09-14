@@ -149,8 +149,10 @@ LRESULT CALLBACK Window::MsgRoutineHandler(HWND hwnd, UINT msg, WPARAM wParam, L
 LRESULT CALLBACK Window::MsgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
 	case WM_CLOSE:
+	{
 		PostQuitMessage(0);
-		return 0;
+		break;
+	}
 	case WM_LBUTTONDOWN:
 	{
 		POINTS coord = MAKEPOINTS(lParam);
